@@ -60,6 +60,7 @@ def square(puzzle, x):
     return list(puzzle[i] for i in _square_indexes[x])
 
 
+# this is for trimming rows, but it also works for trimming cols and squares!
 def trim(row):
     known_items = [list(x)[0] for x in row if len(list(x)) == 1]
     for i in row:
@@ -69,6 +70,14 @@ def trim(row):
                 i.remove(item)
             except KeyError:
                 pass
+    # any number that only appears once can be locked in to that position
+    for n in range(1,10):
+        if len([n in x for x in row if n in x]) == 1:
+            for i in row:
+                if len(i) > 1:
+                    if n in i:
+                        i.clear()
+                        i.add(n)
 
 
 def pretty_print_sudoku(puzzle):

@@ -11,5 +11,6 @@ spaces. All other characters are ignored.
 
 ## Known issues
 
-* If a puzzle has multiple solutions, a solution will never be found.
+* Only finds "shallow" solutions, that can be solved within an single row,
+  column or square.
 
