@@ -3,6 +3,7 @@
 from builtins import range
 
 import argparse
+import itertools
 import sys
 
 try:
@@ -96,6 +97,15 @@ def pretty_print_sudoku(puzzle):
 '''.format(*(list(x)[0] for x in puzzle))
 
 
+def flatten(list_of_lists):
+    "Flatten one level of nesting"
+    return itertools.chain.from_iterable(list_of_lists)
+
+
+def brute_force(puzzle):
+    raise NotImplementedError('shallow search failed, brute force required')
+
+
 def main():
     parser = argparse.ArgumentParser(description='Solve some sudoku',
             epilog='''Each input file must contain exactly 81 input digits.
@@ -108,11 +118,16 @@ def main():
 
     for puzzle_file in args.files:
         puzzle = read_input(puzzle_file)
+        current_progress = len(list(flatten(puzzle)))
         while any(len(x) > 1 for x in puzzle):
             for i in range(9):
                 trim(row(puzzle, i))
                 trim(col(puzzle, i))
                 trim(square(puzzle, i))
+            progress = len(list(flatten(puzzle)))
+            if progress >= current_progress:
+                brute_force(puzzle)
+            current_progress = progress
         print(pretty_print_sudoku(puzzle))
 
 
