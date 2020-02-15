@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from builtins import range
+
 import argparse
 import sys
 
@@ -7,6 +9,7 @@ try:
     import itertools.izip as zip
 except ImportError:
     pass
+
 
 # get characters from a file-like object f
 def sudoku_chars(f):
@@ -21,7 +24,7 @@ def sudoku_chars(f):
 # get all the chars as an array from infile
 def read_input(f):
     chars = sudoku_chars(f)
-    return list(chars.next() for n in range(81))
+    return list(next(chars) for n in range(81))
 
 
 _square_indexes = [[0, 1, 2, 9, 10, 11, 18, 19, 20],
@@ -41,22 +44,10 @@ def row(puzzle, x):
     return list(puzzle[i] for i in indexes)
 
 
-def set_row(puzzle, x, row):
-    indexes = (x*9 + n for n in range(9))
-    for i, j in zip(indexes, row):
-        puzzle[i] = j
-
-
 # get a column from a flat puzzle array
 def col(puzzle, x):
     indexes = (n*9 + x for n in range(9))
     return list(puzzle[i] for i in indexes)
-
-
-def set_col(puzzle, x, col):
-    indexes = (n*9 + x for n in range(9))
-    for i, j in zip(indexes, col):
-        puzzle[i] = j
 
 
 # 0|1|2
@@ -67,23 +58,6 @@ def set_col(puzzle, x, col):
 # return a single square
 def square(puzzle, x):
     return list(puzzle[i] for i in _square_indexes[x])
-
-
-def set_square(puzzle, x, square):
-    for i, j in zip(_square_indexes[x], square):
-        puzzle[i] = j
-
-
-def cols(puzzle):
-    return list(col(puzzle, i) for i in range(9))
-
-
-def rows(puzzle):
-    return list(row(puzzle, i) for i in range(9))
-
-
-def squares(puzzle):
-    return list(square(puzzle, i) for i in range(9))
 
 
 def trim(row):
